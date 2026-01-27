@@ -1,6 +1,18 @@
-import { ai, config, model } from '@/utils/GooglGenAi';
+import { GoogleGenAI } from '@google/genai';
 
 async function query(prompt: string) {
+	const ai = new GoogleGenAI({
+		apiKey: import.meta.env?.VITE_GOOGLE_AI_API_KEY,
+	});
+
+	const config = {
+		thinkingConfig: {
+			thinkingLevel: 'HIGH',
+		},
+	};
+
+	const model = 'gemini-3-flash-preview';
+
 	const response = await ai.models.generateContentStream({
 		model,
 		...config,
@@ -8,7 +20,7 @@ async function query(prompt: string) {
 	});
 	let fileIndex = 0;
 	for await (const chunk of response) {
-		console.log(chunk.text);
+		return chunk.text;
 	}
 }
 export default query;

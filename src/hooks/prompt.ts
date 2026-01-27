@@ -3,7 +3,7 @@ import query from '@/services/prompt';
 
 export const usePrompt = (prompt: string) => {
 	return useQuery({
-		queryKey: ['prompt', prompt],
+		queryKey: ['prompt'],
 		queryFn: () => query(prompt),
 		enabled: !!prompt,
 	});
