@@ -13,23 +13,29 @@ export function AskForm() {
 	];
 
 	return (
-		<Field>
-			<FieldLabel htmlFor="input-button-group">
-				<h2 className="text-2xl md:text-4xl text-center font-semibold mb-4 text-foreground w-full">
-					{question[Math.floor(Math.random() * question.length)]}
-				</h2>
-			</FieldLabel>
-			<ButtonGroup className="w-full md:max-w-2xl mx-auto h-12">
-				<Input
-					id="input-button-group"
-					type="text"
-					placeholder="Ask your question"
-					className="h-full"
-				/>
-				<Button variant="default" className="cursor-pointer h-full">
-					Search
-				</Button>
-			</ButtonGroup>
-		</Field>
+		<form className="w-full" action="">
+			<Field>
+				<FieldLabel htmlFor="input-button-group">
+					<h2 className="text-2xl md:text-4xl text-center font-semibold mb-4 text-foreground w-full">
+						{question[Math.floor(Math.random() * question.length)]}
+					</h2>
+				</FieldLabel>
+				<ButtonGroup className="w-full md:max-w-2xl mx-auto h-12">
+					<Input
+						id="input-button-group"
+						type="text"
+						placeholder="Ask your question"
+						className="h-full"
+					/>
+					<Button
+						variant="default"
+						type="submit"
+						className="cursor-pointer h-full"
+					>
+						Search
+					</Button>
+				</ButtonGroup>
+			</Field>
+		</form>
 	);
 }
