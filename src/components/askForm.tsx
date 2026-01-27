@@ -12,8 +12,14 @@ export function AskForm() {
 		'What topic are you interested in?',
 	];
 
+	function OnSubmit(event: React.SubmitEvent<HTMLFormElement>) {
+		event.preventDefault();
+		const formData = new FormData(event.currentTarget);
+		const content = formData.get('content') as string;
+	}
+
 	return (
-		<form className="w-full" action="">
+		<form className="w-full" action="" onSubmit={OnSubmit}>
 			<Field>
 				<FieldLabel htmlFor="input-button-group">
 					<h2 className="text-2xl md:text-4xl text-center font-semibold mb-4 text-foreground w-full">
@@ -24,6 +30,7 @@ export function AskForm() {
 					<Input
 						id="input-button-group"
 						type="text"
+						name="content"
 						placeholder="Ask your question"
 						className="h-full"
 					/>
