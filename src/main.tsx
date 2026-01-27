@@ -11,10 +11,11 @@ createRoot(document.getElementById('root')!).render(
 		<BrowserRouter>
 			<ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
 				<Header />
-
-				<Routes>
-					<Route path="/" element={<Home />} />
-				</Routes>
+				<main className="mx-100">
+					<Routes>
+						<Route path="/" element={<Home />} />
+					</Routes>
+				</main>
 			</ThemeProvider>
 		</BrowserRouter>
 	</StrictMode>,

@@ -4,7 +4,7 @@ import { AppSidebar } from './sidebar';
 
 const Header = () => {
 	return (
-		<header className=" px-10 py-7  flex items-center gap-8">
+		<header className=" px-10 py-7  flex items-center gap-8 fixed">
 			<SidebarProvider className=" min-h-fit  items-center w-fit ">
 				<AppSidebar />
 				<nav className="h-fit">
