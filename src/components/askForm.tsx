@@ -3,8 +3,11 @@ import { ButtonGroup } from '@/components/ui/button-group';
 import { Field, FieldLabel } from '@/components/ui/field';
 import { Input } from '@/components/ui/input';
 
-import query from '@/services/prompt';
-import { convoAtom, convoListAtom, questionAtom } from '@/storage/conversationStore';
+import {
+	convoAtom,
+	convoListAtom,
+	questionAtom,
+} from '@/storage/conversationStore';
 import { useSetAtom } from 'jotai/react';
 import { Trash2 } from 'lucide-react';
 import { useState } from 'react';
@@ -37,7 +40,7 @@ export function AskForm({ disTitle = false, delConvo = false }: AskFormProps) {
 	}
 
 	return (
-		<form className="w-full" action={SubmitAction} >
+		<form className="w-full" action={SubmitAction}>
 			<Field>
 				{displayTitle && (
 					<FieldLabel htmlFor="input-button-group">
@@ -67,9 +70,12 @@ export function AskForm({ disTitle = false, delConvo = false }: AskFormProps) {
 					{delConvo && (
 						<Button
 							variant="destructive"
-							onClick={() => {setConvoList([]); window.location.reload();}}
+							onClick={() => {
+								setConvoList([]);
+								window.location.reload();
+							}}
 							className="cursor-pointer h-full"
-							title='Destroy conversation'
+							title="Destroy conversation"
 						>
 							<Trash2 />
 						</Button>
