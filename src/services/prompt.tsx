@@ -13,20 +13,11 @@ async function query(prompt: string) {
 
 	const model = 'gemini-3-flash-preview';
 
-	const response = await ai.models.generateContentStream({
+	const response = await ai.models.generateContent({
 		model,
 		...config,
-		contents: [{ role: 'user', parts: [{ text: prompt }] }],
+		contents: prompt,
 	});
-	let fileIndex = 0;
-	let fullResponse = '';
-	for await (const chunk of response) {
-		fullResponse += chunk.text;
-		if (fileIndex === 0) {
-			return chunk.text;
-		}
-		fileIndex++;
-	}
-	return fullResponse;
+	return response.text;
 }
 export default query;

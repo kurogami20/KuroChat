@@ -19,14 +19,13 @@ export function AskForm() {
 
 	async function OnSubmit(event: React.SubmitEvent<HTMLFormElement>) {
 		event.preventDefault();
+		console.log(event.currentTarget.firstChild);
 		const formData = new FormData(event.currentTarget);
 		const content = formData.get('content') as string;
 		if (content) {
 			event.currentTarget.reset();
 			const response = await query(content);
 			if (response) {
-				console.log(response);
-
 				const convoData = {
 					question: content,
 					answer: response,
@@ -41,7 +40,10 @@ export function AskForm() {
 		<form className="w-full" onSubmit={OnSubmit}>
 			<Field>
 				<FieldLabel htmlFor="input-button-group">
-					<h2 className="text-2xl md:text-4xl text-center font-semibold mb-4 text-foreground w-full">
+					<h2
+						id="title"
+						className="text-2xl md:text-4xl text-center font-semibold mb-4 text-foreground w-full"
+					>
 						{question[Math.floor(Math.random() * question.length)]}
 					</h2>
 				</FieldLabel>

@@ -1,6 +1,11 @@
 import { atomWithStorage } from 'jotai/utils';
+import { atom } from 'jotai/vanilla';
 
-export const convoAtom = atomWithStorage<{
+export const convoAtom = atom<{
 	question: string;
 	answer: string;
-} | null>('convo', null);
+} | null>(null);
+
+export const convoListAtom = atomWithStorage<
+	{ question: string; answer: string }[]
+>('convoList', []);
