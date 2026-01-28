@@ -4,11 +4,11 @@ import { AppSidebar } from './sidebar';
 
 const Header = () => {
 	return (
-		<header className=" px-10 py-7  flex items-center gap-8">
+		<header className=" px-10 py-7  flex items-center gap-8 fixed">
 			<SidebarProvider className=" min-h-fit  items-center w-fit ">
 				<AppSidebar />
-				<nav className="h-fit">
-					<SidebarTrigger className="cursor-pointer" />
+				<nav className="h-fit ">
+					<SidebarTrigger className="cursor-pointer [&_svg:not([class*='size-'])]:size-6" />
 				</nav>
 			</SidebarProvider>
 			<NavLink to="/">
