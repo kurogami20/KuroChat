@@ -8,7 +8,7 @@ import Home from './pages/home';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
 createRoot(document.getElementById('root')!).render(
-	<StrictMode>
+	
 		<BrowserRouter>
 			<QueryClientProvider client={new QueryClient()}>
 				<ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
@@ -21,5 +21,5 @@ createRoot(document.getElementById('root')!).render(
 				</ThemeProvider>
 			</QueryClientProvider>
 		</BrowserRouter>
-	</StrictMode>,
+
 );

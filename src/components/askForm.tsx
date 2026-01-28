@@ -4,11 +4,20 @@ import { Field, FieldLabel } from '@/components/ui/field';
 import { Input } from '@/components/ui/input';
 
 import query from '@/services/prompt';
-import { convoAtom } from '@/storage/conversationStore';
+import { convoAtom, convoListAtom, questionAtom } from '@/storage/conversationStore';
 import { useSetAtom } from 'jotai/react';
+import { Trash2 } from 'lucide-react';
+import { useState } from 'react';
 
-export function AskForm() {
-	const setConvo = useSetAtom(convoAtom);
+interface AskFormProps {
+	disTitle?: boolean;
+	delConvo?: boolean;
+}
+
+export function AskForm({ disTitle = false, delConvo = false }: AskFormProps) {
+	const [displayTitle, setDisplayTitle] = useState(disTitle);
+	const setConvoList = useSetAtom(convoListAtom);
+	const setQuestion = useSetAtom(questionAtom);
 	const question = [
 		'What do you need help with today?',
 		'How can I assist you?',
@@ -17,36 +26,29 @@ export function AskForm() {
 		'What topic are you interested in?',
 	];
 
-	async function OnSubmit(event: React.SubmitEvent<HTMLFormElement>) {
-		event.preventDefault();
-		console.log(event.currentTarget.firstChild);
-		const formData = new FormData(event.currentTarget);
-		const content = formData.get('content') as string;
-		if (content) {
-			event.currentTarget.reset();
-			const response = await query(content);
-			if (response) {
-				const convoData = {
-					question: content,
-					answer: response,
-				};
-
-				setConvo(convoData);
-			}
-		}
+	async function SubmitAction(formData: FormData) {
+		setDisplayTitle(false);
+		const form = document.querySelector('form');
+		form?.reset();
+		const data = Object.fromEntries(formData) as {
+			content: string;
+		};
+		setQuestion(data.content);
 	}
 
 	return (
-		<form className="w-full" onSubmit={OnSubmit}>
+		<form className="w-full" action={SubmitAction} >
 			<Field>
-				<FieldLabel htmlFor="input-button-group">
-					<h2
-						id="title"
-						className="text-2xl md:text-4xl text-center font-semibold mb-4 text-foreground w-full"
-					>
-						{question[Math.floor(Math.random() * question.length)]}
-					</h2>
-				</FieldLabel>
+				{displayTitle && (
+					<FieldLabel htmlFor="input-button-group">
+						<h2
+							id="title"
+							className="text-2xl md:text-4xl text-center font-semibold mb-4 text-foreground w-full"
+						>
+							{question[Math.floor(Math.random() * question.length)]}
+						</h2>
+					</FieldLabel>
+				)}
 				<ButtonGroup className="w-full md:max-w-2xl mx-auto h-12">
 					<Input
 						id="input-button-group"
@@ -60,8 +62,18 @@ export function AskForm() {
 						type="submit"
 						className="cursor-pointer h-full"
 					>
-						Search
+						Ask
 					</Button>
+					{delConvo && (
+						<Button
+							variant="destructive"
+							onClick={() => {setConvoList([]); window.location.reload();}}
+							className="cursor-pointer h-full"
+							title='Destroy conversation'
+						>
+							<Trash2 />
+						</Button>
+					)}
 				</ButtonGroup>
 			</Field>
 		</form>
