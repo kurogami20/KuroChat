@@ -4,8 +4,11 @@ import { Field, FieldLabel } from '@/components/ui/field';
 import { Input } from '@/components/ui/input';
 
 import query from '@/services/prompt';
+import { convoAtom } from '@/storage/conversationStore';
+import { useSetAtom } from 'jotai/react';
 
 export function AskForm() {
+	const setConvo = useSetAtom(convoAtom);
 	const question = [
 		'What do you need help with today?',
 		'How can I assist you?',
@@ -19,9 +22,17 @@ export function AskForm() {
 		const formData = new FormData(event.currentTarget);
 		const content = formData.get('content') as string;
 		if (content) {
+			event.currentTarget.reset();
 			const response = await query(content);
 			if (response) {
 				console.log(response);
+
+				const convoData = {
+					question: content,
+					answer: response,
+				};
+
+				setConvo(convoData);
 			}
 		}
 	}

@@ -19,8 +19,14 @@ async function query(prompt: string) {
 		contents: [{ role: 'user', parts: [{ text: prompt }] }],
 	});
 	let fileIndex = 0;
+	let fullResponse = '';
 	for await (const chunk of response) {
-		return chunk.text;
+		fullResponse += chunk.text;
+		if (fileIndex === 0) {
+			return chunk.text;
+		}
+		fileIndex++;
 	}
+	return fullResponse;
 }
 export default query;

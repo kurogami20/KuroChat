@@ -7,8 +7,8 @@ const Header = () => {
 		<header className=" px-10 py-7  flex items-center gap-8 fixed">
 			<SidebarProvider className=" min-h-fit  items-center w-fit ">
 				<AppSidebar />
-				<nav className="h-fit pt-11">
-					<SidebarTrigger className="cursor-pointer [&_svg:not([class*='size-'])]:size-8" />
+				<nav className="h-fit ">
+					<SidebarTrigger className="cursor-pointer [&_svg:not([class*='size-'])]:size-6" />
 				</nav>
 			</SidebarProvider>
 			<NavLink to="/">
