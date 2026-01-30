@@ -2,7 +2,7 @@ import type { User } from '@/@types/index';
 
 import instance from '@/utils/axios';
 
-const auth = {
+const userService = {
 	async signUp(data: Omit<User, 'id'>) {
 		const response = await instance.post('/signup', data).catch((error) => {
 			if (error.response) {
@@ -78,4 +78,4 @@ const auth = {
 	},
 };
 
-export default auth;
+export default userService;
