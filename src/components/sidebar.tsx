@@ -1,4 +1,11 @@
-import { Calendar, Home, Inbox, Search, Settings } from 'lucide-react';
+import {
+	Calendar,
+	Search,
+	Settings,
+	SquarePen,
+	FolderOpen,
+	ChevronDown,
+} from 'lucide-react';
 
 import {
 	Sidebar,
@@ -10,34 +17,41 @@ import {
 	SidebarMenuButton,
 	SidebarMenuItem,
 } from '@/components/ui/sidebar';
+import {
+	Collapsible,
+	CollapsibleContent,
+	CollapsibleTrigger,
+} from './ui/collapsible';
 
 // Menu items.
 const items = [
 	{
-		title: 'Home',
+		title: 'New Chat',
 		url: '#',
-		icon: Home,
+		icon: SquarePen,
 	},
 	{
-		title: 'Inbox',
+		title: 'All Chats',
 		url: '#',
-		icon: Inbox,
+		icon: FolderOpen,
 	},
 	{
-		title: 'Calendar',
-		url: '#',
-		icon: Calendar,
-	},
-	{
-		title: 'Search',
+		title: 'Search chats',
 		url: '#',
 		icon: Search,
 	},
-	{
-		title: 'Settings',
-		url: '#',
-		icon: Settings,
-	},
+];
+const chats = [
+	'What is AI?',
+	'How does machine learning work?',
+	'What are neural networks?',
+	'Explain deep learning.',
+	'What is natural language processing?',
+	'What are the applications of AI?',
+	'How does computer vision work?',
+	'What is reinforcement learning?',
+	'Explain generative AI.',
+	'What are the ethical considerations of AI?',
 ];
 
 export function AppSidebar() {
@@ -45,7 +59,6 @@ export function AppSidebar() {
 		<Sidebar>
 			<SidebarContent>
 				<SidebarGroup>
-					<SidebarGroupLabel>Application</SidebarGroupLabel>
 					<SidebarGroupContent>
 						<SidebarMenu>
 							{items.map((item) => (
@@ -61,6 +74,32 @@ export function AppSidebar() {
 						</SidebarMenu>
 					</SidebarGroupContent>
 				</SidebarGroup>
+				<Collapsible defaultOpen className="group/collapsible">
+					<SidebarGroup>
+						<SidebarGroupLabel>
+							{' '}
+							<CollapsibleTrigger className="cursor-pointer text-left w-full">
+								All chats{' '}
+							</CollapsibleTrigger>
+							<ChevronDown className="ml-auto transition-transform group-data-[state=open]/collapsible:rotate-180" />
+						</SidebarGroupLabel>
+						<CollapsibleContent>
+							<SidebarGroupContent>
+								<SidebarMenu>
+									{chats.map((item, index) => (
+										<SidebarMenuItem key={index}>
+											<SidebarMenuButton asChild>
+												<a href={item}>
+													<span>{item}</span>
+												</a>
+											</SidebarMenuButton>
+										</SidebarMenuItem>
+									))}
+								</SidebarMenu>
+							</SidebarGroupContent>
+						</CollapsibleContent>
+					</SidebarGroup>
+				</Collapsible>
 			</SidebarContent>
 		</Sidebar>
 	);
