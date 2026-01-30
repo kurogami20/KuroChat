@@ -5,7 +5,7 @@ import instance from '@/utils/axios';
 export const questionService = {
 	async createQuestion(token: string, data: Omit<Question, 'id'>) {
 		const response = await instance
-			.post(`/questions/create`, data, {
+			.post(`/question`, data, {
 				headers: { Authorization: `Bearer ${token}` },
 			})
 			.catch((error) => {

@@ -17,6 +17,6 @@ export type Question = {
 
 export type Answer = {
 	id: number;
-	question_id: number;
+	conversation_id: number;
 	text: string;
 };
