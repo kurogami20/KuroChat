@@ -14,10 +14,9 @@ import { useState } from 'react';
 
 interface AskFormProps {
 	disTitle?: boolean;
-	delConvo?: boolean;
 }
 
-export function AskForm({ disTitle = false, delConvo = false }: AskFormProps) {
+export function AskForm({ disTitle = false }: AskFormProps) {
 	const [displayTitle, setDisplayTitle] = useState(disTitle);
 	const setConvoList = useSetAtom(convoListAtom);
 	const setQuestion = useSetAtom(questionAtom);
@@ -67,19 +66,6 @@ export function AskForm({ disTitle = false, delConvo = false }: AskFormProps) {
 					>
 						Ask
 					</Button>
-					{delConvo && (
-						<Button
-							variant="destructive"
-							onClick={() => {
-								setConvoList([]);
-								window.location.reload();
-							}}
-							className="cursor-pointer h-full"
-							title="Destroy conversation"
-						>
-							<Trash2 />
-						</Button>
-					)}
 				</ButtonGroup>
 			</Field>
 		</form>

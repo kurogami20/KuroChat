@@ -38,7 +38,7 @@ const Login = () => {
 						} else {
 							setError(false);
 							console.log(response);
-							setUserToken({ token: response.token }); //token à vérifier
+							setUserToken({ token: response.token, user: response.user }); //token à vérifier
 							navigate('/');
 						}
 					}

@@ -5,6 +5,8 @@ import {
 	SquarePen,
 	FolderOpen,
 	ChevronDown,
+	CircleUserRound,
+	LogOut,
 } from 'lucide-react';
 
 import {
@@ -24,6 +26,12 @@ import {
 	CollapsibleTrigger,
 } from './ui/collapsible';
 import { NavLink } from 'react-router';
+import {
+	convoListAtom,
+	currentConversationAtom,
+} from '@/storage/conversationStore';
+import { useAtomValue, useSetAtom } from 'jotai/react';
+import { userAtom } from '@/storage/userStore';
 
 // Menu items.
 const items = [
@@ -57,6 +65,11 @@ const chats = [
 ];
 
 export function AppSidebar() {
+	const setConvoList = useSetAtom(convoListAtom);
+	const userValue = useAtomValue(userAtom);
+	const setUser = useSetAtom(userAtom);
+	const setConvo = useSetAtom(convoListAtom);
+	const setCurrentConversation = useSetAtom(currentConversationAtom);
 	return (
 		<Sidebar>
 			<SidebarContent>
@@ -64,7 +77,15 @@ export function AppSidebar() {
 					<SidebarGroupContent>
 						<SidebarMenu>
 							{items.map((item) => (
-								<SidebarMenuItem key={item.title}>
+								<SidebarMenuItem
+									id={item.title}
+									key={item.title}
+									onClick={() => {
+										if (item.title === 'New Chat') setConvoList([]);
+										setCurrentConversation(null);
+										window.location.reload();
+									}}
+								>
 									<SidebarMenuButton asChild>
 										<a href={item.url}>
 											<item.icon />
@@ -106,7 +127,22 @@ export function AppSidebar() {
 			<SidebarFooter>
 				<SidebarGroup>
 					<SidebarGroupContent>
-						<NavLink to="/login">Connexion</NavLink>
+						{userValue.user ? (
+							<span className="flex gap-2 items-center w-full">
+								{' '}
+								<CircleUserRound /> {userValue.user}
+								<LogOut
+									className="self-end cursor-pointer ml-15"
+									onClick={() => {
+										setUser({ token: '', user: '' });
+										setConvo([]);
+										setCurrentConversation(null);
+									}}
+								/>
+							</span>
+						) : (
+							<NavLink to="/login">Connexion</NavLink>
+						)}
 					</SidebarGroupContent>
 				</SidebarGroup>
 			</SidebarFooter>

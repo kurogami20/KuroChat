@@ -1,14 +1,19 @@
 import { AskForm } from '@/components/askForm';
 import ConvoCard from '@/components/convoCard';
 import { ConvoCardSkeleton } from '@/components/convoCardSkeleton';
+import answerService from '@/services/answer';
+import { conversationService } from '@/services/conversation';
 // import { ScrollArea } from '@/components/ui/scroll-area';
 import query from '@/services/prompt';
+import questionService from '@/services/question';
 import {
 	convoAtom,
 	convoListAtom,
+	currentConversationAtom,
 	questionAtom,
 } from '@/storage/conversationStore';
-import { useAtomValue, useSetAtom } from 'jotai/react';
+import { userAtom } from '@/storage/userStore';
+import { useAtom, useAtomValue, useSetAtom } from 'jotai/react';
 import { useEffect, useState } from 'react';
 
 const Home = () => {
@@ -18,6 +23,12 @@ const Home = () => {
 	const question = useAtomValue(questionAtom);
 
 	const setConvoList = useSetAtom(convoListAtom);
+
+	const user = useAtomValue(userAtom);
+
+	const [currentConversation, setCurrentConversation] = useAtom(
+		currentConversationAtom,
+	);
 
 	async function answerQuestion() {
 		if (question) {
@@ -32,6 +43,64 @@ const Home = () => {
 
 				// setDisplayCard(false);
 				setQuestion('');
+
+				if (user.token) {
+					if (currentConversation === null) {
+						const createConvo = await conversationService.createConversation(
+							user.token,
+						);
+						if (createConvo && createConvo.status === 'success') {
+							console.log('Conversation created with ID:', createConvo.id);
+							setCurrentConversation(createConvo.id);
+
+							const addQuestion = await questionService.createQuestion(
+								user.token,
+								{
+									text: question,
+									conversation_id: createConvo.id,
+								},
+							);
+							if (addQuestion.status === 'success') {
+								console.log('Question added to conversation');
+								const addAnswer = await answerService.createAnswer(user.token, {
+									text: response,
+									conversation_id: createConvo.id,
+								});
+								if (addAnswer.status === 'success') {
+									console.log('Answer added to conversation');
+								} else {
+									console.log('Failed to add answer to conversation');
+								}
+							} else {
+								console.log('Failed to add question to conversation');
+							}
+						}
+					} else if (currentConversation !== null) {
+						console.log(currentConversation);
+						const addQuestion = await questionService.createQuestion(
+							user.token,
+							{
+								text: question,
+								conversation_id: currentConversation,
+							},
+						);
+						if (addQuestion.status === 'success') {
+							console.log('Question added to conversation');
+
+							const addAnswer = await answerService.createAnswer(user.token, {
+								text: response,
+								conversation_id: currentConversation,
+							});
+							if (addAnswer.status === 'success') {
+								console.log('Answer added to conversation');
+							} else {
+								console.log('Failed to add answer to conversation');
+							}
+						} else {
+							console.log('Failed to add question to conversation');
+						}
+					}
+				}
 			}
 		}
 		// setDisplayCard(true);
@@ -65,9 +134,9 @@ const Home = () => {
 				)}
 			</div>
 			{convoListValue[0] ? (
-				<AskForm disTitle={false} delConvo={true} />
+				<AskForm disTitle={false} />
 			) : (
-				<AskForm disTitle={true} delConvo={false} />
+				<AskForm disTitle={true} />
 			)}
 		</div>
 	);
