@@ -11,17 +11,20 @@ const userService = {
 				console.log(error.response.data);
 				console.log(error.response.status);
 				console.log(error.response.headers);
+				return error.response;
 			} else if (error.request) {
 				// la requête a été faite mais aucune réponse n’a été reçue
 				// `error.request` est une instance de XMLHttpRequest dans le navigateur
 				// et une instance de http.ClientRequest avec node.js
 				console.log(error.request);
+				return error.request;
 			} else {
 				// quelque chose s’est passé lors de la construction de la requête et cela
 				// a provoqué une erreur
 				console.log('Error', error.message);
+				return error.message;
 			}
-			console.log(error.config);
+			// console.log(error.config);
 		});
 
 		return response?.data;
@@ -34,17 +37,20 @@ const userService = {
 				console.log(error.response.data);
 				console.log(error.response.status);
 				console.log(error.response.headers);
+				return error.response;
 			} else if (error.request) {
 				// la requête a été faite mais aucune réponse n’a été reçue
 				// `error.request` est une instance de XMLHttpRequest dans le navigateur
 				// et une instance de http.ClientRequest avec node.js
 				console.log(error.request);
+				return error.request;
 			} else {
 				// quelque chose s’est passé lors de la construction de la requête et cela
 				// a provoqué une erreur
 				console.log('Error', error.message);
+				return error.message;
 			}
-			console.log(error.config);
+			// console.log(error.config);
 		});
 
 		return response?.data;

@@ -6,6 +6,7 @@ import Header from './components/header';
 import { ThemeProvider } from './components/theme-provider';
 import Home from './pages/home';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import Login from './pages/login';
 
 createRoot(document.getElementById('root')!).render(
 	<StrictMode>
@@ -16,6 +17,8 @@ createRoot(document.getElementById('root')!).render(
 					<main className="mx-100">
 						<Routes>
 							<Route path="/" element={<Home />} />
+							<Route path="/login" element={<Login />} />
+							<Route path="/signup" element={<div>Signup Page</div>} />
 						</Routes>
 					</main>
 				</ThemeProvider>

@@ -1,5 +1,3 @@
-import type { Conversation } from '@/@types/index';
-
 import instance from '@/utils/axios';
 
 export const conversationService = {

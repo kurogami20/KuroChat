@@ -10,6 +10,7 @@ import {
 import {
 	Sidebar,
 	SidebarContent,
+	SidebarFooter,
 	SidebarGroup,
 	SidebarGroupContent,
 	SidebarGroupLabel,
@@ -22,6 +23,7 @@ import {
 	CollapsibleContent,
 	CollapsibleTrigger,
 } from './ui/collapsible';
+import { NavLink } from 'react-router';
 
 // Menu items.
 const items = [
@@ -101,6 +103,13 @@ export function AppSidebar() {
 					</SidebarGroup>
 				</Collapsible>
 			</SidebarContent>
+			<SidebarFooter>
+				<SidebarGroup>
+					<SidebarGroupContent>
+						<NavLink to="/login">Connexion</NavLink>
+					</SidebarGroupContent>
+				</SidebarGroup>
+			</SidebarFooter>
 		</Sidebar>
 	);
 }
