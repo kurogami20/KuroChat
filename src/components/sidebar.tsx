@@ -1,7 +1,5 @@
 import {
-	Calendar,
 	Search,
-	Settings,
 	SquarePen,
 	FolderOpen,
 	ChevronDown,
@@ -32,6 +30,8 @@ import {
 } from '@/storage/conversationStore';
 import { useAtomValue, useSetAtom } from 'jotai/react';
 import { userAtom } from '@/storage/userStore';
+import conversationService from '@/services/conversation';
+import { useEffect } from 'react';
 
 // Menu items.
 const items = [
@@ -70,6 +70,23 @@ export function AppSidebar() {
 	const setUser = useSetAtom(userAtom);
 	const setConvo = useSetAtom(convoListAtom);
 	const setCurrentConversation = useSetAtom(currentConversationAtom);
+	const convo = useAtomValue(convoListAtom);
+
+	useEffect(() => {
+		async function convoList() {
+			if (userValue.token) {
+				const convos = await conversationService.getConversations(
+					userValue.token,
+				);
+				if (convos && convos.status === 'success') {
+					console.log(convos.data);
+				}
+			}
+		}
+
+		convoList();
+	}, [userValue.token, convo]);
+
 	return (
 		<Sidebar>
 			<SidebarContent>
@@ -109,15 +126,21 @@ export function AppSidebar() {
 						<CollapsibleContent>
 							<SidebarGroupContent>
 								<SidebarMenu>
-									{chats.map((item, index) => (
-										<SidebarMenuItem key={index}>
-											<SidebarMenuButton asChild>
-												<a href={item}>
-													<span>{item}</span>
-												</a>
-											</SidebarMenuButton>
-										</SidebarMenuItem>
-									))}
+									{userValue.token ? (
+										chats.map((item, index) => (
+											<SidebarMenuItem key={index}>
+												<SidebarMenuButton asChild>
+													<a href={item}>
+														<span>{item}</span>
+													</a>
+												</SidebarMenuButton>
+											</SidebarMenuItem>
+										))
+									) : (
+										<p className="p-4 text-sm text-gray-500">
+											Please log in to see your chats.
+										</p>
+									)}
 								</SidebarMenu>
 							</SidebarGroupContent>
 						</CollapsibleContent>
@@ -128,18 +151,20 @@ export function AppSidebar() {
 				<SidebarGroup>
 					<SidebarGroupContent>
 						{userValue.user ? (
-							<span className="flex gap-2 items-center w-full">
+							<div className="flex gap-2 items-center w-full justify-between">
 								{' '}
-								<CircleUserRound /> {userValue.user}
+								<span className="flex items-center gap-2">
+									<CircleUserRound /> {userValue.user}
+								</span>
 								<LogOut
-									className="self-end cursor-pointer ml-15"
+									className="self-end cursor-pointer align-right "
 									onClick={() => {
 										setUser({ token: '', user: '' });
 										setConvo([]);
 										setCurrentConversation(null);
 									}}
 								/>
-							</span>
+							</div>
 						) : (
 							<NavLink to="/login">Connexion</NavLink>
 						)}

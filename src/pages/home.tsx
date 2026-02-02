@@ -7,14 +7,13 @@ import { conversationService } from '@/services/conversation';
 import query from '@/services/prompt';
 import questionService from '@/services/question';
 import {
-	convoAtom,
 	convoListAtom,
 	currentConversationAtom,
 	questionAtom,
 } from '@/storage/conversationStore';
 import { userAtom } from '@/storage/userStore';
 import { useAtom, useAtomValue, useSetAtom } from 'jotai/react';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 
 const Home = () => {
 	// const [displayCard, setDisplayCard] = useState(true);
@@ -44,10 +43,11 @@ const Home = () => {
 				// setDisplayCard(false);
 				setQuestion('');
 
-				if (user.token) {
+				if (user.token !== '') {
 					if (currentConversation === null) {
 						const createConvo = await conversationService.createConversation(
 							user.token,
+							{ title: question },
 						);
 						if (createConvo && createConvo.status === 'success') {
 							console.log('Conversation created with ID:', createConvo.id);

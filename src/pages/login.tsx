@@ -5,10 +5,12 @@ import { useState } from 'react';
 import { userAtom } from '@/storage/userStore';
 import { useNavigate } from 'react-router';
 import { useSetAtom } from 'jotai/react';
+import { convoListAtom } from '@/storage/conversationStore';
 
 const Login = () => {
 	const [error, setError] = useState<boolean>(false);
 	const setUserToken = useSetAtom(userAtom);
+	const setConvo = useSetAtom(convoListAtom);
 	const navigate = useNavigate();
 	return (
 		<div className="flex flex-col items-center justify-center min-h-dvh py-2 gap-5">
@@ -22,7 +24,7 @@ const Login = () => {
 			<FormConnect
 				title="Login to your account"
 				description="Enter your email below to login to your account"
-				action="Signin"
+				action="Signup"
 				password="Forgot your password?"
 				formAction={async (formData: FormData) => {
 					const data = Object.fromEntries(formData) as {
@@ -39,6 +41,7 @@ const Login = () => {
 							setError(false);
 							console.log(response);
 							setUserToken({ token: response.token, user: response.user }); //token à vérifier
+							setConvo([]);
 							navigate('/');
 						}
 					}
