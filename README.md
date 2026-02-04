@@ -1,6 +1,8 @@
 # Kuro Chat
 
-A project to test the Google AI APi
+A React project to test the Google AI APi
+
+I've connected an API Rest named Kuro Chat API made by me to this project to create users and save conversations.
 
 ```npm run dev``` to launch
 
