@@ -53,9 +53,9 @@ export const conversationService = {
 			});
 		return response?.data;
 	},
-	async createConversation(token: string) {
+	async createConversation(token: string, data?: { title?: string }) {
 		const response = await instance
-			.post(`/conversations/create`, {
+			.post(`/conversations/create`, data, {
 				headers: { Authorization: `Bearer ${token}` },
 			})
 			.catch((error) => {
