@@ -14,12 +14,6 @@ jobs:
       - name: Checkout du code
         uses: actions/checkout@v4
 
-      # installation de npm
-      - name: Installation de NPM
-        uses: actions/setup-node@v4
-        with:
-          version: 8
-
       # installation de node
       - name: Installation de Node.js
         uses: actions/setup-node@v4
@@ -39,7 +33,7 @@ jobs:
        
       # déploiement sur Surge
       - name: Déploiement sur Surge.sh
-        run: npx surge --project ./dist --domain kuroChat.surge.sh --single
+        run: npx surge --project ./dist --domain kurochat.surge.sh --single
         env:
           SURGE_LOGIN: ${{ secrets.SURGE_LOGIN }}
           SURGE_TOKEN: ${{ secrets.SURGE_TOKEN }}
