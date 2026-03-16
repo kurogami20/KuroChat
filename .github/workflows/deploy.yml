@@ -30,6 +30,10 @@ jobs:
       - name: Build de l'application
         run: npm run build
         working-directory: ./ # chemin du dossier contenant le package.json
+        env:
+          VITE_GOOGLE_AI_API_KEY: ${{ secrets.VITE_GOOGLE_AI_API_KEY }}
+          REACT_APP_API_URL: https://kurochatapi.onrender.com/api/v1
+
        
       # déploiement sur Surge
       - name: Déploiement sur Surge.sh
