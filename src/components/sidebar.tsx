@@ -52,18 +52,18 @@ const items = [
 		icon: Search,
 	},
 ];
-const chats = [
-	'What is AI?',
-	'How does machine learning work?',
-	'What are neural networks?',
-	'Explain deep learning.',
-	'What is natural language processing?',
-	'What are the applications of AI?',
-	'How does computer vision work?',
-	'What is reinforcement learning?',
-	'Explain generative AI.',
-	'What are the ethical considerations of AI?',
-];
+// const chats = [
+// 	'What is AI?',
+// 	'How does machine learning work?',
+// 	'What are neural networks?',
+// 	'Explain deep learning.',
+// 	'What is natural language processing?',
+// 	'What are the applications of AI?',
+// 	'How does computer vision work?',
+// 	'What is reinforcement learning?',
+// 	'Explain generative AI.',
+// 	'What are the ethical considerations of AI?',
+// ];
 
 export function AppSidebar() {
 	const setConvoList = useSetAtom(convoListAtom);

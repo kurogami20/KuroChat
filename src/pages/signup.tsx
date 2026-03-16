@@ -4,7 +4,7 @@ import { Progress } from '@/components/ui/progress';
 import userService from '@/services/user';
 import { convoListAtom } from '@/storage/conversationStore';
 import { useSetAtom } from 'jotai/react';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useNavigate } from 'react-router';
 
 const Signup = () => {
