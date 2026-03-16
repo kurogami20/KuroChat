@@ -1,0 +1,45 @@
+name: Déploiement continu sur Surge
+
+on:
+  push:
+    branches:
+      - master # déclenche le workflow à chaque push sur la branche master
+
+jobs:
+  build_and_deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      # récuperation du code
+      - name: Checkout du code
+        uses: actions/checkout@v4
+
+      # installation de npm
+      - name: Installation de NPM
+        uses: actions/setup-node@v4
+        with:
+          version: 8
+
+      # installation de node
+      - name: Installation de Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22.14.0" # version de node
+          cache: "npm"
+          cache-dependency-path: "./package-lock.json" # chemin du fichier de lock pour le cache
+
+      # installation des dépendances
+      - name: Installation des dépendances
+        run: npm install
+          
+      # build de l'app
+      - name: Build de l'application
+        run: npm run build
+        working-directory: ./ # chemin du dossier contenant le package.json
+       
+      # déploiement sur Surge
+      - name: Déploiement sur Surge.sh
+        run: npx surge --project ./dist --domain kuroChat.surge.sh --single
+        env:
+          SURGE_LOGIN: ${{ secrets.SURGE_LOGIN }}
+          SURGE_TOKEN: ${{ secrets.SURGE_TOKEN }}
