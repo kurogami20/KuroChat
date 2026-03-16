@@ -1,15 +1,16 @@
 import {
-	Calendar,
 	Search,
-	Settings,
 	SquarePen,
 	FolderOpen,
 	ChevronDown,
+	CircleUserRound,
+	LogOut,
 } from 'lucide-react';
 
 import {
 	Sidebar,
 	SidebarContent,
+	SidebarFooter,
 	SidebarGroup,
 	SidebarGroupContent,
 	SidebarGroupLabel,
@@ -22,6 +23,16 @@ import {
 	CollapsibleContent,
 	CollapsibleTrigger,
 } from './ui/collapsible';
+import { NavLink } from 'react-router';
+import {
+	convoListAtom,
+	currentConversationAtom,
+} from '@/storage/conversationStore';
+import { useAtomValue, useSetAtom } from 'jotai/react';
+import { userAtom } from '@/storage/userStore';
+import conversationService from '@/services/conversation';
+import { useEffect, useState } from 'react';
+import type { Conversation } from '@/@types';
 
 // Menu items.
 const items = [
@@ -55,6 +66,31 @@ const chats = [
 ];
 
 export function AppSidebar() {
+	const setConvoList = useSetAtom(convoListAtom);
+	const userValue = useAtomValue(userAtom);
+	const setUser = useSetAtom(userAtom);
+	const setConvo = useSetAtom(convoListAtom);
+	const setCurrentConversation = useSetAtom(currentConversationAtom);
+	const convo = useAtomValue(convoListAtom);
+	const [allChats, setAllChats] = useState<[]>([]);
+
+	// biome-ignore lint/correctness/useExhaustiveDependencies: <Je dois mettre à jour la liste des conversation quand une nouvelle est créée>
+	useEffect(() => {
+		async function convoList() {
+			if (userValue.token) {
+				const convos = await conversationService.getConversations(
+					userValue.token,
+				);
+				if (convos && convos.status === 'success') {
+					console.log(convos.data);
+					setAllChats(convos.data);
+				}
+			}
+		}
+
+		convoList();
+	}, [userValue.token, convo]);
+
 	return (
 		<Sidebar>
 			<SidebarContent>
@@ -62,7 +98,15 @@ export function AppSidebar() {
 					<SidebarGroupContent>
 						<SidebarMenu>
 							{items.map((item) => (
-								<SidebarMenuItem key={item.title}>
+								<SidebarMenuItem
+									id={item.title}
+									key={item.title}
+									onClick={() => {
+										if (item.title === 'New Chat') setConvoList([]);
+										setCurrentConversation(null);
+										window.location.reload();
+									}}
+								>
 									<SidebarMenuButton asChild>
 										<a href={item.url}>
 											<item.icon />
@@ -78,29 +122,67 @@ export function AppSidebar() {
 					<SidebarGroup>
 						<SidebarGroupLabel>
 							{' '}
-							<CollapsibleTrigger className="cursor-pointer text-left w-full">
+							<CollapsibleTrigger className="cursor-pointer text-left w-full flex items-center">
 								All chats{' '}
+								<ChevronDown className="ml-auto transition-transform group-data-[state=open]/collapsible:rotate-180" />
 							</CollapsibleTrigger>
-							<ChevronDown className="ml-auto transition-transform group-data-[state=open]/collapsible:rotate-180" />
 						</SidebarGroupLabel>
 						<CollapsibleContent>
 							<SidebarGroupContent>
-								<SidebarMenu>
-									{chats.map((item, index) => (
-										<SidebarMenuItem key={index}>
-											<SidebarMenuButton asChild>
-												<a href={item}>
-													<span>{item}</span>
-												</a>
-											</SidebarMenuButton>
-										</SidebarMenuItem>
-									))}
+								<SidebarMenu className="flex flex-col gap-3">
+									{userValue.token ? (
+										allChats.map((item: Omit<Conversation, 'user_id'>) => (
+											<SidebarMenuItem key={item.id}>
+												<SidebarMenuButton
+													className="cursor-pointer  "
+													onClick={() => {
+														console.log('object');
+													}}
+													asChild
+												>
+													<p>
+														{item.title.length > 33
+															? `${item.title.slice(0, 33)}...`
+															: item.title}
+													</p>
+												</SidebarMenuButton>
+											</SidebarMenuItem>
+										))
+									) : (
+										<p className="p-4 text-sm text-gray-500">
+											Please log in to see your chats.
+										</p>
+									)}
 								</SidebarMenu>
 							</SidebarGroupContent>
 						</CollapsibleContent>
 					</SidebarGroup>
 				</Collapsible>
 			</SidebarContent>
+			<SidebarFooter>
+				<SidebarGroup>
+					<SidebarGroupContent>
+						{userValue.user ? (
+							<div className="flex gap-2 items-center w-full justify-between">
+								{' '}
+								<span className="flex items-center gap-2">
+									<CircleUserRound /> {userValue.user}
+								</span>
+								<LogOut
+									className="self-end cursor-pointer align-right "
+									onClick={() => {
+										setUser({ token: '', user: '' });
+										setConvo([]);
+										setCurrentConversation(null);
+									}}
+								/>
+							</div>
+						) : (
+							<NavLink to="/login">Connexion</NavLink>
+						)}
+					</SidebarGroupContent>
+				</SidebarGroup>
+			</SidebarFooter>
 		</Sidebar>
 	);
 }
