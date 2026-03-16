@@ -6,6 +6,7 @@ export type User = {
 
 export type Conversation = {
 	id: number;
+	title: string;
 	user_id: number;
 };
 

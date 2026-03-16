@@ -3,13 +3,8 @@ import { ButtonGroup } from '@/components/ui/button-group';
 import { Field, FieldLabel } from '@/components/ui/field';
 import { Input } from '@/components/ui/input';
 
-import {
-	convoAtom,
-	convoListAtom,
-	questionAtom,
-} from '@/storage/conversationStore';
+import { questionAtom } from '@/storage/conversationStore';
 import { useSetAtom } from 'jotai/react';
-import { Trash2 } from 'lucide-react';
 import { useState } from 'react';
 
 interface AskFormProps {
@@ -18,7 +13,6 @@ interface AskFormProps {
 
 export function AskForm({ disTitle = false }: AskFormProps) {
 	const [displayTitle, setDisplayTitle] = useState(disTitle);
-	const setConvoList = useSetAtom(convoListAtom);
 	const setQuestion = useSetAtom(questionAtom);
 	const question = [
 		'What do you need help with today?',

@@ -10,30 +10,38 @@ import {
 } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { useNavigate } from 'react-router';
 
 interface CardDemoProps {
 	title: string;
 	description: string;
 	action: string;
 	password: string | undefined;
+	otherwise?: string;
 	formAction?: (formData: FormData) => Promise<void>;
 }
 
 export function FormConnect({
 	title,
 	description,
+	otherwise,
 	action,
 	password,
 	formAction,
 }: CardDemoProps) {
+	const navigate = useNavigate();
 	return (
 		<Card className="w-full max-w-lg">
 			<CardHeader>
 				<CardTitle>{title}</CardTitle>
 				<CardDescription>{description}</CardDescription>
 				<CardAction>
-					<Button variant="link" className="cursor-pointer">
-						{action}
+					<Button
+						variant="link"
+						onClick={() => navigate(`/${otherwise?.toLowerCase()}`)}
+						className="cursor-pointer  capitalize"
+					>
+						{otherwise}
 					</Button>
 				</CardAction>
 			</CardHeader>

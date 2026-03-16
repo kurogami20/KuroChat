@@ -31,7 +31,8 @@ import {
 import { useAtomValue, useSetAtom } from 'jotai/react';
 import { userAtom } from '@/storage/userStore';
 import conversationService from '@/services/conversation';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
+import type { Conversation } from '@/@types';
 
 // Menu items.
 const items = [
@@ -71,7 +72,9 @@ export function AppSidebar() {
 	const setConvo = useSetAtom(convoListAtom);
 	const setCurrentConversation = useSetAtom(currentConversationAtom);
 	const convo = useAtomValue(convoListAtom);
+	const [allChats, setAllChats] = useState<[]>([]);
 
+	// biome-ignore lint/correctness/useExhaustiveDependencies: <Je dois mettre à jour la liste des conversation quand une nouvelle est créée>
 	useEffect(() => {
 		async function convoList() {
 			if (userValue.token) {
@@ -80,6 +83,7 @@ export function AppSidebar() {
 				);
 				if (convos && convos.status === 'success') {
 					console.log(convos.data);
+					setAllChats(convos.data);
 				}
 			}
 		}
@@ -118,21 +122,29 @@ export function AppSidebar() {
 					<SidebarGroup>
 						<SidebarGroupLabel>
 							{' '}
-							<CollapsibleTrigger className="cursor-pointer text-left w-full">
+							<CollapsibleTrigger className="cursor-pointer text-left w-full flex items-center">
 								All chats{' '}
+								<ChevronDown className="ml-auto transition-transform group-data-[state=open]/collapsible:rotate-180" />
 							</CollapsibleTrigger>
-							<ChevronDown className="ml-auto transition-transform group-data-[state=open]/collapsible:rotate-180" />
 						</SidebarGroupLabel>
 						<CollapsibleContent>
 							<SidebarGroupContent>
-								<SidebarMenu>
+								<SidebarMenu className="flex flex-col gap-3">
 									{userValue.token ? (
-										chats.map((item, index) => (
-											<SidebarMenuItem key={index}>
-												<SidebarMenuButton asChild>
-													<a href={item}>
-														<span>{item}</span>
-													</a>
+										allChats.map((item: Omit<Conversation, 'user_id'>) => (
+											<SidebarMenuItem key={item.id}>
+												<SidebarMenuButton
+													className="cursor-pointer  "
+													onClick={() => {
+														console.log('object');
+													}}
+													asChild
+												>
+													<p>
+														{item.title.length > 33
+															? `${item.title.slice(0, 33)}...`
+															: item.title}
+													</p>
 												</SidebarMenuButton>
 											</SidebarMenuItem>
 										))
